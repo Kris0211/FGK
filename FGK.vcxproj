@@ -127,11 +127,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="RasTerX\include\Ray.h" />
-    <ClInclude Include="RasTerX\include\Sphere.h" />
-    <ClInclude Include="RasTerX\include\Vector3.h" />
+    <ClInclude Include="RasTerX\include\Plane.hpp" />
+    <ClInclude Include="RasTerX\include\Ray.hpp" />
+    <ClInclude Include="RasTerX\include\Sphere.hpp" />
+    <ClInclude Include="RasTerX\include\Vector3.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="RasTerX\src\Ray.cpp" />
+    <ClCompile Include="RasTerX\src\Plane.cpp" />
     <ClCompile Include="RasTerX\src\Sphere.cpp" />
     <ClCompile Include="RasTerX\src\Vector3.cpp" />
   </ItemGroup>
