@@ -127,6 +127,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="include\Obj.hpp" />
     <ClInclude Include="RasTerX\include\Matrix3.hpp" />
     <ClInclude Include="RasTerX\include\Matrix4.hpp" />
     <ClInclude Include="RasTerX\include\Plane.hpp" />
@@ -148,6 +149,7 @@
     <ClCompile Include="RasTerX\src\Vector3.cpp" />
     <ClCompile Include="RasTerX\src\Vector4.cpp" />
     <ClCompile Include="RasTerX\src\Matrix3.cpp" />
+    <ClCompile Include="src\Obj.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

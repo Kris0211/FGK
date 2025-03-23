@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cmath>
+#include <vector>
 
 #include "RasTerX/include/Vector3.hpp"
 #include "RasTerX/include/Ray.hpp"
@@ -9,6 +10,7 @@
 #include "RasTerX/include/Matrix4.hpp"
 #include "RasTerX/include/Vector4.hpp"
 #include "RasTerX/include/Quaternion.hpp"
+#include "include/Obj.hpp"
 
 #define PI 3.14159265358979323846
 
@@ -103,7 +105,7 @@ int main(int argc, char** argv)
 	rtx::Ray tr2 = rtx::Ray(p1, p2);
 
 	bool intersetcs_t2 = t.Intersects(tr2, ip_t);
-	std::cout << "Case 1 ray triangle intersection: " << (intersetcs_t2 ? "true" : "false")
+	std::cout << "Case 2 ray triangle intersection: " << (intersetcs_t2 ? "true" : "false")
 		<< "\nIntersection point: " << (intersetcs_t2 ? ip_t.ToString() : "N/A") << std::endl;
 
 	// Przypadek 3: Linia nieprzecinaj¹ca trójk¹ta
@@ -113,7 +115,7 @@ int main(int argc, char** argv)
 	rtx::Ray tr3 = rtx::Ray(p1, p2);
 
 	bool intersetcs_t3 = t.Intersects(tr3, ip_t);
-	std::cout << "Case 1 ray triangle intersection: " << (intersetcs_t3 ? "true" : "false")
+	std::cout << "Case 3 ray triangle intersection: " << (intersetcs_t3 ? "true" : "false")
 		<< "\nIntersection point: " << (intersetcs_t3 ? ip_t.ToString() : "N/A") << std::endl;
 
 
@@ -246,6 +248,15 @@ int main(int argc, char** argv)
 	std::cout << "Dot product of quatA and quatB: " << quatA.Dot(quatB) << std::endl;
 	std::cout << "Quat product of quatA and quatB: " << (quatA * quatB).ToString() << std::endl;
 	std::cout << "Difference: " << (quatA - quatB).ToString() << std::endl;
+
+
+	// OBJ
+	RayTracer::Obj plant = RayTracer::Obj("res/monkey.obj");
+
+	for (const rtx::Triangle& t : plant.GetTriangles())
+	{
+		std::cout << "\nA: " << t.GetVertA().ToString() << " | B: " << t.GetVertB().ToString() << " | C: " << t.GetVertC().ToString();
+	}
 
 	return 0;
 }
