@@ -230,7 +230,8 @@ int main(int argc, char** argv)
 	
 	rtx::Vector3 vect1 = rtx::Vector3(3.f, 1.f, 3.f);
 	rtx::Quaternion quat1 = rtx::Quaternion(PI / 2, rtx::Vector3(1.f, 0.f, 1.f).Normal());
-	//TODO: Rotate vect1
+	rtx::Vector3 result = quat1.RotateVectorByQuaternion(vect1);
+	std::cout << "Vector: " << vect1.ToString() << " rotated by Quaternion: " << quat1.ToString() << " = " << result.ToString() << std::endl;
 
 	rtx::Quaternion quat2 = rtx::Quaternion::RotationQuaternion(PI / 6, rtx::Vector3(1.f, 0.f, 0.f));
 
@@ -253,10 +254,10 @@ int main(int argc, char** argv)
 	// OBJ
 	RayTracer::Obj plant = RayTracer::Obj("res/monkey.obj");
 
-	for (const rtx::Triangle& t : plant.GetTriangles())
+	/*for (const rtx::Triangle& t : plant.GetTriangles())
 	{
 		std::cout << "\nA: " << t.GetVertA().ToString() << " | B: " << t.GetVertB().ToString() << " | C: " << t.GetVertC().ToString();
-	}
+	}*/
 
 	return 0;
 }
