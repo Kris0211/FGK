@@ -44,13 +44,13 @@ int main(int argc, char** argv)
 	std::cout << "\n\n===SPHERE INTERSECTIONS==\n";
 
 	rtx::Sphere s = rtx::Sphere(rtx::Vector3::Zero(), 10.f);
-	rtx::Ray r1 = rtx::Ray(rtx::Vector3(0, 0, -20), rtx::Vector3::Zero());
+	rtx::Ray r1 = rtx::Ray(rtx::Vector3(0, 0, -20), s.center);
 	rtx::Ray r2 = rtx::Ray(rtx::Vector3(0, 0, -20), rtx::Vector3::Up(), FLT_MAX);
 	rtx::Vector3 ip1 = rtx::Vector3();
 	rtx::Vector3 ip2 = rtx::Vector3();
 
 	bool intersects1 = s.Intersects(r1, ip1);
-	bool intersects2 = s.Intersects(r2, ip2); //check if it really is false
+	bool intersects2 = s.Intersects(r2, ip2);
 
 	std::cout << "Ray 1 spehere intersection: " << (intersects1 ? "true" : "false") 
 		<< "\nIntersection point: " << (intersects1 ? ip1.ToString() : "N/A") << std::endl;
@@ -89,7 +89,7 @@ int main(int argc, char** argv)
 	rtx::Vector3 p1 = rtx::Vector3(-1.f, 0.5f, 0.f);
 	rtx::Vector3 p2 = rtx::Vector3(1.f, 0.5f, 0.f);
 	
-	rtx::Ray tr1 = rtx::Ray(p1, p2); //FIXME: the ray should not end in p2
+	rtx::Ray tr1 = rtx::Ray(p1, p2);
 	rtx::Vector3 ip_t;
 
 	bool intersetcs_t1 = t.Intersects(tr1, ip_t);
@@ -100,7 +100,7 @@ int main(int argc, char** argv)
 	p1 = rtx::Vector3(2.f, -1.f, 0.f);
 	p2 = rtx::Vector3(2.f, 2.f, 0.f);
 
-	rtx::Ray tr2 = rtx::Ray(p1, p2); //FIXME: the ray should not end in p2
+	rtx::Ray tr2 = rtx::Ray(p1, p2);
 
 	bool intersetcs_t2 = t.Intersects(tr2, ip_t);
 	std::cout << "Case 1 ray triangle intersection: " << (intersetcs_t2 ? "true" : "false")
@@ -110,7 +110,7 @@ int main(int argc, char** argv)
 	p1 = rtx::Vector3(0.f, 0.f, -1.f);
 	p2 = rtx::Vector3(0.f, 0.f, 1.f);
 
-	rtx::Ray tr3 = rtx::Ray(p1, p2); //FIXME: the ray should not end in p2
+	rtx::Ray tr3 = rtx::Ray(p1, p2);
 
 	bool intersetcs_t3 = t.Intersects(tr3, ip_t);
 	std::cout << "Case 1 ray triangle intersection: " << (intersetcs_t3 ? "true" : "false")
