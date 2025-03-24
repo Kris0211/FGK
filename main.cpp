@@ -12,7 +12,7 @@
 #include "RasTerX/include/Quaternion.hpp"
 #include "include/Obj.hpp"
 
-#define PI 3.14159265358979323846
+//#define PRINT_DEBUG
 
 int main(int argc, char** argv)
 {
@@ -168,37 +168,37 @@ int main(int argc, char** argv)
 		rtx::Vector3 vect = rtx::Vector3(5, 10, 15);
 
 		mat1.SetTranslation(vect);
-		std::cout << "\nMacierz translacji o wektor [5, 10, 15]:\n";
+		std::cout << "\nTranslation by [5, 10, 15]:\n";
 		mat1.PrintMatrix();
 
 		mat1.LoadIdentity();
 		mat1.SetScale(vect);
-		std::cout << "\nMacierz skalowania o skali rownej wektorowi [5, 10, 15]:\n";
+		std::cout << "\nScale by [5, 10, 15]:\n";
 		mat1.PrintMatrix();
 
 		mat1.LoadIdentity();
 		mat1.SetScale(3);
-		std::cout << "\nMacierz skalowania o stalej skali rownej 3:\n";
+		std::cout << "\nUniform scale by 3:\n";
 		mat1.PrintMatrix();
 
 		mat1.LoadIdentity();
 		mat1.SetRotationX(PI / 6);
-		std::cout << "\nMacierz obrotu wokol osi X o 30 stopni:\n";
+		std::cout << "\nX rotation, 30 degrees:\n";
 		mat1.PrintMatrix();
 
 		mat1.LoadIdentity();
 		mat1.SetRotationY(PI / 4);
-		std::cout << "\nMacierz obrotu wokol osi Y o 45 stopni:\n";
+		std::cout << "\nY rotation, 45 degrees:\n";
 		mat1.PrintMatrix();
 
 		mat1.LoadIdentity();
 		mat1.SetRotationZ(PI / 3);
-		std::cout << "\nMacierz obrotu wokol osi Z o 60 stopni:\n";
+		std::cout << "\nZ rotation, 60 degrees:\n";
 		mat1.PrintMatrix();
 
 		mat1.LoadIdentity();
 		mat1.SetRotationAxis(PI / 2, vect);
-		std::cout << "\nMacierz obrotu wokol osi:\n";
+		std::cout << "\nRotation matrix:\n";
 		mat1.PrintMatrix();
 	}
 
@@ -208,19 +208,18 @@ int main(int argc, char** argv)
 		mat1.SetRotationY(PI * 0.5);
 		rtx::Vector4 vec = rtx::Vector4(1, 0, 0, 1);
 		rtx::Vector4 result = mat1 * vec;
-		std::cout << "\nVektor [1, 0, 0, 1] after rottion:\n" << result.ToString();
+		std::cout << "\nVector [1, 0, 0, 1] after rottion:\n" << result.ToString();
 	}
 
 	//Test (braku) przemiennosci mnozenia macierzy
 	{
-		std::cout << "\n\n-=:BRAK PRZEMIENNOSCI MNOZENIA MACIERZY:=-";
 		mat1 = rtx::Matrix4(val1);
 		mat2 = rtx::Matrix4(val2);
 		rtx::Matrix4 mat3 = mat1 * mat2;
-		std::cout << "\nMacierz powstala w wyniku mnozenia macierzy 1 przez macierz 2:\n";
+		std::cout << "\nMatrix1 x Matrix2:\n";
 		mat3.PrintMatrix();
 		rtx::Matrix4 mat4 = mat2 * mat1;
-		std::cout << "\nMacierz powstala w wyniku mnozenia macierzy 2 przez macierz 1:\n";
+		std::cout << "\nMatrix2 x Matrix1:\n";
 		mat4.PrintMatrix();
 	}
 
@@ -231,17 +230,22 @@ int main(int argc, char** argv)
 	rtx::Vector3 vect1 = rtx::Vector3(3.f, 1.f, 3.f);
 	rtx::Quaternion quat1 = rtx::Quaternion(PI / 2, rtx::Vector3(1.f, 0.f, 1.f).Normal());
 	rtx::Vector3 result = quat1.RotateVectorByQuaternion(vect1);
-	std::cout << "Vector: " << vect1.ToString() << " rotated by Quaternion: " << quat1.ToString() << " = " << result.ToString() << std::endl;
+	std::cout << "Vector: " << vect1.ToString() << " rotated by Quaternion: " << quat1.ToString() << " \n= " << result.ToString() << std::endl;
 
 	rtx::Quaternion quat2 = rtx::Quaternion::RotationQuaternion(PI / 6, rtx::Vector3(1.f, 0.f, 0.f));
 
 	float quat2_mag = quat2.Magnitude();
 	std::cout << "Magnitude: " << quat2_mag << std::endl;
 
-	rtx::Quaternion quat2_inv = rtx::Quaternion::Invert(quat2);
+	rtx::Quaternion quat2_inv = rtx::Quaternion::InvertQuaternion(quat2);
 	std::cout << "Inverted: " << quat2_inv.ToString() << std::endl;
 
-	//TODO: euler angles
+	rtx::EulerAngles eulers = rtx::Quaternion::QuaternionToEuler(quat2);
+	std::cout << "Euler angles:"
+		<< "\nPitch: " << rtx::MathUtils::RadToDeg(eulers.pitch)
+		<< "\nYaw:" << rtx::MathUtils::RadToDeg(eulers.yaw)
+		<< "\nRoll:" << rtx::MathUtils::RadToDeg(eulers.roll)
+		<< "\n\n";
 
 	rtx::Quaternion quatA = rtx::Quaternion(0.233f, 0.06f, -0.257f, -0.935f);
 	rtx::Quaternion quatB = rtx::Quaternion(-0.752f, 0.286f, 0.374f, 0.459f);
@@ -252,12 +256,15 @@ int main(int argc, char** argv)
 
 
 	// OBJ
-	RayTracer::Obj plant = RayTracer::Obj("res/monkey.obj");
+	RayTracer::Obj monkey = RayTracer::Obj("res/monkey.obj");
 
-	/*for (const rtx::Triangle& t : plant.GetTriangles())
+#ifdef PRINT_DEBUG
+	std::cout << "\n\n";
+	for (const rtx::Triangle& t : monkey.GetTriangles())
 	{
 		std::cout << "\nA: " << t.GetVertA().ToString() << " | B: " << t.GetVertB().ToString() << " | C: " << t.GetVertC().ToString();
-	}*/
+	}
+#endif
 
 	return 0;
 }
