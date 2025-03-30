@@ -6,7 +6,7 @@ OrthographicCamera::OrthographicCamera(unsigned int width, unsigned int height,
 {
 }
 
-rtx::Ray OrthographicCamera::GetRay(float x, float y)
+rtx::Ray OrthographicCamera::CastRay(float x, float y)
 {
 	const float pixelWidth = 2.f / width;
 	const float pixelHeight = 2.f / height;
@@ -14,7 +14,7 @@ rtx::Ray OrthographicCamera::GetRay(float x, float y)
 	float xPixelCenter = -1.f + (x + 0.5f) * pixelWidth;
 	float yPixelCenter = 1.f - (y + 0.5f) * pixelHeight;
 
-	rtx::Vector3 offset(xPixelCenter + position.x, yPixelCenter + position.y, 0.f);
+	rtx::Vector3 offset(xPixelCenter, yPixelCenter, 0.f);
 
-	return {direction, offset};
+	return { position + offset, direction.Normal(), FLT_MAX };
 }

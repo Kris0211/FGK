@@ -27,20 +27,23 @@ void Renderer::Render(const std::shared_ptr<Camera> camera)
 			bool foundHit = false;
 
 			rtx::Vector3 hit;
-			rtx::Vector3 outHit(std::numeric_limits<float>::max(), std::numeric_limits<float>::max(), std::numeric_limits<float>::max());
+			rtx::Vector3 oldHit(std::numeric_limits<float>::max(), std::numeric_limits<float>::max(), std::numeric_limits<float>::max());
 
 			Material material;
 			Material outMaterial;
 
-			rtx::Ray ray = camera->GetRay(x, y);
+			rtx::Ray ray = camera->CastRay(x, y);
 
 			for (const std::shared_ptr<Renderable>& renderable : renderables)
 			{
-				if (renderable->Trace(ray, hit, material) && ray.origin.Dot(hit) < ray.origin.Dot(outHit))
+				if (renderable->Trace(ray, hit, material))
 				{
-					foundHit = true;
-					outHit = hit;
-					outMaterial = material;
+					if ((hit - ray.origin).Length() < (oldHit - ray.origin).Length())
+					{
+						foundHit = true;
+						oldHit = hit;
+						outMaterial = material;
+					}
 				}
 			}
 
