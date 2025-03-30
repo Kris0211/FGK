@@ -13,10 +13,10 @@ public:
 
 	Material& GetMaterial() { return material; };
 
-	virtual bool Trace(const rtx::Ray& ray, rtx::Vector3& ref_RayHit, Material& ref_Material);
+	virtual bool Trace(const rtx::Ray& ray, rtx::Vector3& ref_RayHit, Material& ref_Material) = 0;
 };
 
-class SphereRenderable : Renderable
+class SphereRenderable : public Renderable
 {
 private:
 	rtx::Sphere sphere;

@@ -4,7 +4,7 @@
 
 class Camera
 {
-private:
+protected:
 	rtx::Vector3 position;
 	rtx::Vector3 direction;
 

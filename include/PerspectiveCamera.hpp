@@ -2,7 +2,7 @@
 
 #include "Camera.hpp"
 
-class PerspectiveCamera : Camera
+class PerspectiveCamera : public Camera
 {
 };
 
