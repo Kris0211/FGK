@@ -27,16 +27,16 @@ int main(int argc, char** argv)
 	Material sm1(0xFF0000FF);
 	std::shared_ptr<SphereRenderable> sphere1 = std::make_shared<SphereRenderable>(sm1, s1);
 	
-	rtx::Sphere s2(rtx::Vector3(0.5f, -0.5f, 0.f), 0.2f);
+	rtx::Sphere s2(rtx::Vector3(0.5f, 0.f, 0.1f), 0.2f);
 	Material sm2(0xFFFF0000);
 	std::shared_ptr<SphereRenderable> sphere2 = std::make_shared<SphereRenderable>(sm2, s2);
 
 	renderer.AddRenderable(sphere1);
 	renderer.AddRenderable(sphere2);
 
-	std::shared_ptr<Camera> camera = std::make_shared<OrthographicCamera>(WIDTH, HEIGHT, rtx::Vector3(0, 0, 0.f), rtx::Vector3(0, 0, 1.f), 3.f, 3.f);
+	std::shared_ptr<Camera> camera = std::make_shared<OrthographicCamera>(WIDTH, HEIGHT, rtx::Vector3(0, 0, -10.f), rtx::Vector3(0, 0, 1.f));
 
-	renderer.Render(camera);
+	renderer.Render(camera);		
 
 	renderer.Save("output.tga");
 

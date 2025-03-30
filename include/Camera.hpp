@@ -14,6 +14,6 @@ protected:
 public:
 	Camera(unsigned int width, unsigned int height, const rtx::Vector3& position, const rtx::Vector3& direction);
 
-	virtual rtx::Ray GetRay(unsigned int x, unsigned int y) = 0;
+	virtual rtx::Ray GetRay(float x, float y) = 0;
 };
 
