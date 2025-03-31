@@ -129,6 +129,7 @@
   <ItemGroup>
     <ClInclude Include="include\Buffer.hpp" />
     <ClInclude Include="include\Camera.hpp" />
+    <ClInclude Include="include\LightIntensity.hpp" />
     <ClInclude Include="include\Material.hpp" />
     <ClInclude Include="include\Obj.hpp" />
     <ClInclude Include="include\OrthographicCamera.hpp" />
@@ -160,6 +161,7 @@
     <ClCompile Include="RasTerX\src\Matrix3.cpp" />
     <ClCompile Include="src\Buffer.cpp" />
     <ClCompile Include="src\Camera.cpp" />
+    <ClCompile Include="src\LightIntensity.cpp" />
     <ClCompile Include="src\Material.cpp" />
     <ClCompile Include="src\Obj.cpp" />
     <ClCompile Include="src\OrthographicCamera.cpp" />

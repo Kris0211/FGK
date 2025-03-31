@@ -40,7 +40,7 @@ int main(int argc, char** argv)
 		WIDTH, HEIGHT, rtx::Vector3(0, 0, -10.f), rtx::Vector3(0, 0, 1.f));
 
 	std::shared_ptr<Camera> perspCamera = std::make_shared<PerspectiveCamera>(
-		WIDTH, HEIGHT, 20.f, 45.f, rtx::Vector3(0, 0, -10.f), rtx::Vector3(0, 0, 1.f));
+		WIDTH, HEIGHT, 1000.f, 45.f, rtx::Vector3(0, 0, -10.f), rtx::Vector3(0, 0, 1.f));
 
 	std::cout << "Rendering images... Please wait.\n";
 
