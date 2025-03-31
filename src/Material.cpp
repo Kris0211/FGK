@@ -2,10 +2,10 @@
 
 Material::Material()
 {
-	color = 0xFF000000;
+	color = Color();
 }
 
-Material::Material(unsigned int color) : color(color)
+Material::Material(Color color) : color(color)
 {
 }
 
@@ -13,12 +13,12 @@ Material::~Material()
 {
 }
 
-unsigned int Material::GetColor() const
+Color Material::GetColor() const
 {
 	return color;
 }
 
-void Material::SetColor(unsigned int c)
+void Material::SetColor(Color c)
 {
 	color = c;
 }
