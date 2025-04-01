@@ -25,12 +25,12 @@ int main(int argc, char** argv)
 {
 	Renderer renderer{WIDTH, HEIGHT, 512, 16, 8};
 
-	rtx::Sphere s1(rtx::Vector3(0.5f, 0.f, -2.5f), 0.35f);
-	Material sm1(0xFF0000FF);
+	rtx::Sphere s1(rtx::Vector3(5.f, -5.f, 10.f), 0.33f);
+	Material sm1(Color(0xFF0000FF));
 	std::shared_ptr<SphereRenderable> sphere1 = std::make_shared<SphereRenderable>(sm1, s1);
 	
-	rtx::Sphere s2(rtx::Vector3(0.f, 0.f, 1.f), 0.35f);
-	Material sm2(0xFFFF0000);
+	rtx::Sphere s2(rtx::Vector3(0.f, 0.f, 0.0f), 0.33f);
+	Material sm2(Color(0xFFFF0000));
 	std::shared_ptr<SphereRenderable> sphere2 = std::make_shared<SphereRenderable>(sm2, s2);
 
 	renderer.AddRenderable(sphere1);
@@ -40,7 +40,7 @@ int main(int argc, char** argv)
 		WIDTH, HEIGHT, rtx::Vector3(0, 0, -10.f), rtx::Vector3(0, 0, 1.f));
 
 	std::shared_ptr<Camera> perspCamera = std::make_shared<PerspectiveCamera>(
-		WIDTH, HEIGHT, 1000.f, 45.f, rtx::Vector3(0, 0, -10.f), rtx::Vector3(0, 0, 1.f));
+		WIDTH, HEIGHT, 100.f, 90.f, rtx::Vector3(0, 0, -10.f), rtx::Vector3(0, 0, 1.f));
 
 	std::cout << "Rendering images... Please wait.\n";
 

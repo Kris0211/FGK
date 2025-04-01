@@ -16,21 +16,14 @@ rtx::Ray PerspectiveCamera::CastRay(float x, float y)
 	float u = l + ((r - l) * (x + 0.5f)) / width;
 	float v = b + ((t - b) * (y + 0.5f)) / height;
 
-	rtx::Vector3 gaze = direction - position;
+	rtx::Vector3 gaze = (direction - position).Normal();
+	rtx::Vector3 w = -gaze.Normal();
 
-	rtx::Vector3 w = -gaze;
-	w = w.Normal();
+	rtx::Vector3 camUp = rtx::Vector3(0.f, -1.f, 0.f);
+	rtx::Vector3 uVec = camUp.Cross(w).Normal();
+	rtx::Vector3 vVec = w.Cross(uVec).Normal();
 
-	rtx::Vector3 uVec = rtx::Vector3::Up().Cross(w);
-	uVec = uVec.Normal();
+	rtx::Vector3 dir = (uVec * u + vVec * v + w * -planeDist).Normal();
 
-	rtx::Vector3 vVec = w.Cross(uVec);
-	vVec = vVec.Normal();
-
-	rtx::Vector3 e = position;
-
-	rtx::Vector3 o = e;
-	rtx::Vector3 d = w * -(planeDist) + uVec * u + vVec * v;
-
-	return { o, d , FLT_MAX };
+	return { position, dir , FLT_MAX};
 }
