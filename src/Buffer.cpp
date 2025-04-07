@@ -21,7 +21,7 @@ void Buffer::SetPixel(unsigned int x, unsigned int y, unsigned int color)
 
 void Buffer::SetBufferColorFill(unsigned int color)
 {
-	for (int i = 0; i < width * height; ++i)
+	for (unsigned int i = 0; i < width * height; ++i)
 	{
 		colorBuffer[i] = color;
 	}

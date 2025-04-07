@@ -15,6 +15,7 @@
 #include "include/Renderer.hpp"
 #include "include/OrthographicCamera.hpp"
 #include "include/PerspectiveCamera.hpp"
+#include "include/PointLight.hpp"
 
 constexpr unsigned int WIDTH = 512;
 constexpr unsigned int HEIGHT = 512;
@@ -25,7 +26,7 @@ int main(int argc, char** argv)
 {
 	Renderer renderer{WIDTH, HEIGHT, 512, 16, 8};
 
-	rtx::Sphere s1(rtx::Vector3(5.f, -5.f, 10.f), 0.33f);
+	rtx::Sphere s1(rtx::Vector3(0.5f, -0.5f, 2.f), 0.33f);
 	Material sm1(Color(0xFF0000FF));
 	std::shared_ptr<SphereRenderable> sphere1 = std::make_shared<SphereRenderable>(sm1, s1);
 	
@@ -35,6 +36,11 @@ int main(int argc, char** argv)
 
 	renderer.AddRenderable(sphere1);
 	renderer.AddRenderable(sphere2);
+
+	PointLight light1(rtx::Vector3(0.f, 1.f, -2.f), 
+		LightIntensity(1.f, 1.f, 1.f), 1.f, 0.05f, 0.01f);
+	std::shared_ptr<Light> pl1 = std::make_shared<PointLight>(light1);
+	renderer.AddLight(pl1);
 
 	std::shared_ptr<Camera> camera = std::make_shared<OrthographicCamera>(
 		WIDTH, HEIGHT, rtx::Vector3(0, 0, -10.f), rtx::Vector3(0, 0, 1.f));

@@ -9,13 +9,13 @@ Material::Material(Color color) : color(color)
 {
 }
 
-Material::~Material()
+Material::Material(Color color, const float specular, const float specularCoeff, const float reflect)
 {
 }
 
 Color Material::GetColor() const
 {
-	return color;
+	return this->color;
 }
 
 void Material::SetColor(Color c)

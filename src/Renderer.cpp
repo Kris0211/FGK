@@ -16,13 +16,18 @@ void Renderer::AddRenderable(const std::shared_ptr<Renderable>& renderable)
 	renderables.push_back(renderable);
 }
 
+void Renderer::AddLight(const std::shared_ptr<Light>& light)
+{
+	lights.push_back(light);
+}
+
 void Renderer::Render(const std::shared_ptr<Camera> camera)
 {
 	colorBuffer->SetBufferColorFill(0xFF000000);
 
-	for (int x = 0; x < colorBuffer->GetWidth(); ++x)
+	for (unsigned int x = 0; x < colorBuffer->GetWidth(); ++x)
 	{
-		for (int y = 0; y < colorBuffer->GetHeight(); ++y)
+		for (unsigned int y = 0; y < colorBuffer->GetHeight(); ++y)
 		{
 			rtx::Vector3 sampledColor = Sampling(camera, x, y, 4, 0.0f, 0.0f, 0.5f);
 			Color pixelColor = Color(sampledColor, 1.f);
@@ -86,6 +91,8 @@ rtx::Vector3 Renderer::GetColor(const std::shared_ptr<Camera> camera, const floa
 	Material material;
 	Material closestMaterial;
 
+	std::shared_ptr<Renderable> closestRenderable;
+
 	Color hitColor = Color(0xFF000000);
 
 	bool foundHit = false;
@@ -99,13 +106,36 @@ rtx::Vector3 Renderer::GetColor(const std::shared_ptr<Camera> camera, const floa
 				foundHit = true;
 				closestHit = hit;
 				closestMaterial = material;
+				closestRenderable = renderable;
 			}
 		}
 	}
 
 	if (foundHit)
 	{
-		hitColor = closestMaterial.GetColor();
+		auto viewDir = (camera->GetPosition() - closestHit).Normal();
+		auto colorVec = CalculateLighting(closestHit, closestRenderable, viewDir);
+		hitColor = Color(colorVec);
 	}
 	return hitColor.ToVector();
+}
+
+rtx::Vector3 Renderer::CalculateLighting(const rtx::Vector3& intersectionPoint, 
+	const std::shared_ptr<Renderable>& closestObject, const rtx::Vector3& cameraDir, const int n)
+{
+	if (lights.empty())
+	{
+		return rtx::Vector3::Zero();
+	}
+
+	rtx::Vector3 finalColor = rtx::Vector3::Zero();
+
+	for (const auto& light : lights)
+	{
+		finalColor += light->CalculateLightColor(renderables, intersectionPoint, closestObject, cameraDir, n);
+	}
+
+	finalColor /= static_cast<float>(lights.size());
+
+	return finalColor;
 }

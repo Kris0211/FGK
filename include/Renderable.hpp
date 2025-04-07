@@ -14,6 +14,7 @@ public:
 	Material& GetMaterial() { return material; };
 
 	virtual bool Trace(const rtx::Ray& ray, rtx::Vector3& ref_RayHit, Material& ref_Material) = 0;
+	virtual rtx::Vector3 GetPosition() const = 0;
 };
 
 class SphereRenderable : public Renderable
@@ -25,4 +26,5 @@ public:
 	SphereRenderable(const Material& material, const rtx::Sphere sphere);
 
 	bool Trace(const rtx::Ray& ray, rtx::Vector3& ref_RayHit, Material& ref_Material) override;
+	rtx::Vector3 GetPosition() const { return sphere.center; }
 };

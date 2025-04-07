@@ -52,7 +52,27 @@ struct Color
 			static_cast<float>(b) / 255.0f
 		);
 	}
+
+	static const unsigned int RED = 0xFFFF0000;
+	static const unsigned int GREEN = 0xFF00FF00;
+	static const unsigned int BLUE = 0xFF0000FF;
+
+	static const unsigned int BLACK = 0xFF000000;
+	static const unsigned int WHITE = 0xFF000000;
+	static const unsigned int GRAY = 0xFF808080;
+
+	static const unsigned int CYAN = 0xFF00FFFF;
+	static const unsigned int MAGENTA = 0xFFFF00FF;
+	static const unsigned int YELLOW = 0xFFFFFF00;
+
+	static const unsigned int ORANGE = 0xFFFF8000;
+	static const unsigned int LIME = 0xFF80FF00;
+	static const unsigned int ROSE = 0xFFFF0080;
+	static const unsigned int VIOLET = 0xFF8000FF;
+	static const unsigned int SPRING_GREEN = 0xFF00FF80;
+	static const unsigned int AZURE = 0xFF0080FF;
 };
+
 
 class Material
 {
@@ -60,9 +80,14 @@ private:
 	Color color;
 
 public:
+	float specular = 0.f;
+	float specularCoeff = 0.f;
+	float reflect = 0.f;
+
 	Material();
 	Material(Color color);
-	~Material();
+	Material(Color color, const float specular, const float specularCoeff, const float reflect);
+	~Material() = default;
 
 	Color GetColor() const;
 	void SetColor(Color c);
