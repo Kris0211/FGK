@@ -30,14 +30,14 @@ int main(int argc, char** argv)
 	Material sm1(Color(0xFF0000FF));
 	std::shared_ptr<SphereRenderable> sphere1 = std::make_shared<SphereRenderable>(sm1, s1);
 	
-	rtx::Sphere s2(rtx::Vector3(0.f, 0.f, 0.0f), 0.33f);
+	rtx::Sphere s2(rtx::Vector3(-0.5f, 0.5f, 2.f), 0.33f);
 	Material sm2(Color(0xFFFF0000));
 	std::shared_ptr<SphereRenderable> sphere2 = std::make_shared<SphereRenderable>(sm2, s2);
 
 	renderer.AddRenderable(sphere1);
 	renderer.AddRenderable(sphere2);
 
-	PointLight light1(rtx::Vector3(0.f, 1.f, -2.f), 
+	PointLight light1(rtx::Vector3(0.f, 0.f, 0.f), 
 		LightIntensity(1.f, 1.f, 1.f), 1.f, 0.05f, 0.01f);
 	std::shared_ptr<Light> pl1 = std::make_shared<PointLight>(light1);
 	renderer.AddLight(pl1);
