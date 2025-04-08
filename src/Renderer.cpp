@@ -125,7 +125,7 @@ rtx::Vector3 Renderer::CalculateLighting(const rtx::Vector3& intersectionPoint,
 {
 	if (lights.empty())
 	{
-		return rtx::Vector3::Zero();
+		return closestObject->GetMaterial().GetColor().ToVector();
 	}
 
 	rtx::Vector3 finalColor = rtx::Vector3::Zero();
