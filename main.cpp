@@ -26,16 +26,31 @@ int main(int argc, char** argv)
 {
 	Renderer renderer{WIDTH, HEIGHT, 512, 16, 8};
 
-	rtx::Sphere s1(rtx::Vector3(0.5f, -0.5f, 2.f), 0.33f);
+	rtx::Sphere s1(rtx::Vector3(-0.5f, -0.5f, 2.f), 0.33f);
 	Material sm1(Color(0xFF0000FF));
 	std::shared_ptr<SphereRenderable> sphere1 = std::make_shared<SphereRenderable>(sm1, s1);
 	
-	rtx::Sphere s2(rtx::Vector3(-0.5f, 0.5f, 2.f), 0.33f);
+	rtx::Sphere s2(rtx::Vector3(0.f, 0.f, 2.f), 0.33f);
 	Material sm2(Color(0xFFFF0000));
 	std::shared_ptr<SphereRenderable> sphere2 = std::make_shared<SphereRenderable>(sm2, s2);
 
+	rtx::Sphere s3(rtx::Vector3(-0.5f, 0.5f, 2.f), 0.33f);
+	Material sm3(Color(0xFF00FF00));
+	std::shared_ptr<SphereRenderable> sphere3 = std::make_shared<SphereRenderable>(sm3, s3);
+
+	rtx::Sphere s4(rtx::Vector3(0.5f, 0.5f, 2.f), 0.33f);
+	Material sm4(Color(0xFFFFFF00));
+	std::shared_ptr<SphereRenderable> sphere4 = std::make_shared<SphereRenderable>(sm4, s4);
+
+	rtx::Sphere s5(rtx::Vector3(0.5f, -0.5f, 2.f), 0.33f);
+	Material sm5(Color(0xFFFF00FF));
+	std::shared_ptr<SphereRenderable> sphere5 = std::make_shared<SphereRenderable>(sm5, s5);
+
 	renderer.AddRenderable(sphere1);
 	renderer.AddRenderable(sphere2);
+	renderer.AddRenderable(sphere3);
+	renderer.AddRenderable(sphere4);
+	renderer.AddRenderable(sphere5);
 
 	PointLight light1(rtx::Vector3(0.f, 0.f, 0.f), 
 		LightIntensity(1.f, 1.f, 1.f), 1.f, 0.05f, 0.01f);

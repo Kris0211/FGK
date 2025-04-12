@@ -95,6 +95,7 @@ rtx::Vector3 Renderer::GetColor(const std::shared_ptr<Camera> camera, const floa
 
 	Color hitColor = Color(0xFF000000);
 
+	int foundID = -1;
 	bool foundHit = false;
 
 	for (const std::shared_ptr<Renderable>& renderable : renderables)
@@ -104,6 +105,7 @@ rtx::Vector3 Renderer::GetColor(const std::shared_ptr<Camera> camera, const floa
 			if ((hit - ray.origin).Length() < (closestHit - ray.origin).Length())
 			{
 				foundHit = true;
+				foundID = std::find(renderables.begin(), renderables.end(), renderable) - renderables.begin();
 				closestHit = hit;
 				closestMaterial = material;
 				closestRenderable = renderable;
@@ -114,7 +116,7 @@ rtx::Vector3 Renderer::GetColor(const std::shared_ptr<Camera> camera, const floa
 	if (foundHit)
 	{
 		auto viewDir = (camera->GetPosition() - closestHit).Normal();
-		auto colorVec = CalculateLighting(closestHit, closestRenderable, viewDir);
+		auto colorVec = CalculateLighting(closestHit, closestRenderable, viewDir, foundID);
 		hitColor = Color(colorVec);
 	}
 	return hitColor.ToVector();
