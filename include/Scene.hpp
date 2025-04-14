@@ -18,7 +18,7 @@ public:
 		const rtx::Vector3& cameraDirection, const int n = 0);
 
 
-	int CheckIntersections(const rtx::Ray ray, rtx::Vector3& intersection, std::shared_ptr<Renderable>& closestRenderable);
+	void CheckIntersections(const rtx::Ray ray, rtx::Vector3& intersection, std::shared_ptr<Renderable>& closestRenderable, int& foundID);
 
 	void AddRenderable(const std::shared_ptr<Renderable>& renderable);
 	void AddLight(const std::shared_ptr<Light>& light);

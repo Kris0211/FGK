@@ -81,7 +81,9 @@ rtx::Vector3 Renderer::GetColor(const std::shared_ptr<Camera> camera, const std:
 
 	Color hitColor = Color(0xFF000000);
 
-	int foundID = scene->CheckIntersections(ray, closestHit, closestRenderable);
+	int foundID = -1;
+	
+	scene->CheckIntersections(ray, closestHit, closestRenderable, foundID);
 
 	if (foundID >= 0)
 	{

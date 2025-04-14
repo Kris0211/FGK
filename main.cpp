@@ -31,21 +31,16 @@ int main(int argc, char** argv)
 	std::shared_ptr<Scene> scene = std::make_shared<Scene>(2);
 
 	// Spheres
-	rtx::Sphere s1(rtx::Vector3(-0.5f, 0.f, -3.f), 0.33f);
+	rtx::Sphere s1(rtx::Vector3(-0.5f, 0.5f, -3.f), 0.33f);
 	Material sm1(Color(Color::GRAY), 128.f, 5.f, 2.f, 0.f);
 	std::shared_ptr<SphereRenderable> sphere1 = std::make_shared<SphereRenderable>(sm1, s1);
 	
-	rtx::Sphere s2(rtx::Vector3(0.5f, 0.f, -6.f), 0.33f);
+	rtx::Sphere s2(rtx::Vector3(0.5f, 0.5f, -6.f), 0.33f);
 	Material sm2(Color(Color::GRAY), 128.f, 20.f, 0.f, 1.f);
 	std::shared_ptr<SphereRenderable> sphere2 = std::make_shared<SphereRenderable>(sm2, s2);
 
-	rtx::Sphere s3(rtx::Vector3(0.f, 0.f, -4.f), 0.5f);
-	Material sm3(Color(0xFFFF0000));
-	std::shared_ptr<SphereRenderable> sphere3 = std::make_shared<SphereRenderable>(sm3, s3);
-
 	scene->AddRenderable(sphere1);
 	scene->AddRenderable(sphere2);
-	//scene->AddRenderable(sphere3);
 
 	// Planes
 	rtx::Plane p1(rtx::Vector3(4.f, 0.f, 0.f), rtx::Vector3(-1.f, 0.f, 0.f));
@@ -80,7 +75,7 @@ int main(int argc, char** argv)
 	scene->AddRenderable(plane6);
 
 	// Lights
-	PointLight light1(rtx::Vector3(0.f, 0.8f, 5.f), 
+	PointLight light1(rtx::Vector3(0.f, 0.5f, -8.f), 
 		LightIntensity(1.f, 1.f, 1.f), 1.f, 0.05f, 0.01f);
 	std::shared_ptr<Light> pl1 = std::make_shared<PointLight>(light1);
 	scene->AddLight(pl1);
@@ -94,8 +89,8 @@ int main(int argc, char** argv)
 
 	std::cout << "Rendering images... Please wait.\n";
 
-	renderer.Render(camera, scene);
-	renderer.Save("o_orho.tga");
+	//renderer.Render(camera, scene);
+	//renderer.Save("o_orho.tga");
 
 	renderer.Render(perspCamera, scene);
 	renderer.Save("o_persp.tga");

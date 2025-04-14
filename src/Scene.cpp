@@ -23,13 +23,14 @@ rtx::Vector3 Scene::CalculateLighting(const rtx::Vector3& intersection, const st
 	return finalColor;
 }
 
-int Scene::CheckIntersections(const rtx::Ray ray, rtx::Vector3& intersection, std::shared_ptr<Renderable>& closestRenderable)
+void Scene::CheckIntersections(const rtx::Ray ray, rtx::Vector3& intersection, std::shared_ptr<Renderable>& closestRenderable, int& foundID)
 {
 	rtx::Vector3 hit;
 	Material material;
 
 	bool found = false;
-	int foundID = -1;
+	int n = foundID;
+	foundID = -1;
 
 	for (const std::shared_ptr<Renderable>& renderable : renderables)
 	{
@@ -37,7 +38,7 @@ int Scene::CheckIntersections(const rtx::Ray ray, rtx::Vector3& intersection, st
 
 		if (renderable->Trace(ray, hit, material))
 		{
-			if ((hit - ray.origin).Length() < (intersection - ray.origin).Length() /*&& foundID != id*/)
+			if ((hit - ray.origin).Length() < (intersection - ray.origin).Length() && foundID != id && n != id)
 			{
 				found = true;
 				foundID = id;
@@ -63,14 +64,12 @@ int Scene::CheckIntersections(const rtx::Ray ray, rtx::Vector3& intersection, st
 			}
 			else
 			{
-				break;
+				return;
 			}
 
-			foundID = CheckIntersections(reflectionRay, intersection, closestRenderable);
+			CheckIntersections(reflectionRay, intersection, closestRenderable, foundID);
 		}
 	}
-
-	return foundID;
 }
 
 void Scene::AddRenderable(const std::shared_ptr<Renderable>& renderable)
