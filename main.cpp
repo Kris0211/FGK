@@ -19,12 +19,14 @@
 
 constexpr unsigned int WIDTH = 512;
 constexpr unsigned int HEIGHT = 512;
+constexpr unsigned int SAMPLES_PER_PIXEL = 512;
+constexpr unsigned int TILES_PER_ROW = 8;
 
 //#define PRINT_DEBUG
 
 int main(int argc, char** argv)
 {
-	Renderer renderer{WIDTH, HEIGHT, 512, 8};
+	Renderer renderer{WIDTH, HEIGHT, SAMPLES_PER_PIXEL, TILES_PER_ROW};
 	
 
 #pragma region SceneSetup

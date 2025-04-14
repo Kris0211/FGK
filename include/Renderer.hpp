@@ -14,8 +14,8 @@ private:
 	unsigned int tilesPerRow;
 
 public:
-	Renderer(unsigned int width, unsigned int height, unsigned int samplesPerPixel,
-		unsigned int tilesPerRow);
+	Renderer(unsigned int width, unsigned int height, 
+		unsigned int samplesPerPixel, unsigned int tilesPerRow);
 	~Renderer();
 
 	void Render(const std::shared_ptr<Camera> camera, const std::shared_ptr<Scene> scene);
