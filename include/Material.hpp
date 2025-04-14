@@ -83,10 +83,11 @@ public:
 	float specular = 0.f;
 	float specularCoeff = 0.f;
 	float reflect = 0.f;
+	float refract = 0.f;
 
 	Material();
 	Material(Color color);
-	Material(Color color, const float specular, const float specularCoeff, const float reflect);
+	Material(Color color, const float specular, const float specularCoeff, const float reflect, const float refract);
 	~Material() = default;
 
 	Color GetColor() const;

@@ -138,6 +138,7 @@
     <ClInclude Include="include\PointLight.hpp" />
     <ClInclude Include="include\Renderable.hpp" />
     <ClInclude Include="include\Renderer.hpp" />
+    <ClInclude Include="include\Scene.hpp" />
     <ClInclude Include="include\TGA.hpp" />
     <ClInclude Include="RasTerX\include\MathUtils.hpp" />
     <ClInclude Include="RasTerX\include\Matrix3.hpp" />
@@ -171,6 +172,7 @@
     <ClCompile Include="src\PointLight.cpp" />
     <ClCompile Include="src\Renderable.cpp" />
     <ClCompile Include="src\Renderer.cpp" />
+    <ClCompile Include="src\Scene.cpp" />
     <ClCompile Include="src\TGA.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

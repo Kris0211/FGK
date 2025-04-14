@@ -1,7 +1,7 @@
 #include "../include/PointLight.hpp"
 
-rtx::Vector3 PointLight::CalculateLightColor(std::vector<std::shared_ptr<Renderable>> objects,
-	rtx::Vector3 intersectionPoint, std::shared_ptr<Renderable> closestObject, rtx::Vector3 cameraDir, int n)
+rtx::Vector3 PointLight::CalculateLightColor(std::vector<std::shared_ptr<Renderable>> renderables,
+	rtx::Vector3 intersectionPoint, std::shared_ptr<Renderable> closestRenderable, rtx::Vector3 cameraDir, int n)
 {
 	bool isInShadow = false;
 	rtx::Ray ray(position, (intersectionPoint - position).Normal(), FLT_MAX);
@@ -14,10 +14,10 @@ rtx::Vector3 PointLight::CalculateLightColor(std::vector<std::shared_ptr<Rendera
 	rtx::Vector3 closestIntersection;
 	Material material;
 
-	for (int i = 0; i < objects.size(); i++)
+	for (int i = 0; i < renderables.size(); i++)
 	{
-		std::shared_ptr<Renderable> obj = objects[i];
-		if (obj->Trace(ray, intersection, material))
+		std::shared_ptr<Renderable> r = renderables[i];
+		if (r->Trace(ray, intersection, material))
 		{
 			float distance = (ray.origin - intersection).Length();
 			if (distance < closestDist)
@@ -36,7 +36,7 @@ rtx::Vector3 PointLight::CalculateLightColor(std::vector<std::shared_ptr<Rendera
 		isInShadow = true;
 	}
 
-	rtx::Vector3 baseColor = closestObject->GetMaterial().GetColor().ToVector();
+	rtx::Vector3 baseColor = closestRenderable->GetMaterial().GetColor().ToVector();
 	rtx::Vector3 ambient = baseColor * 0.2f;
 
 	ambient.x *= intensity.r;
@@ -50,13 +50,13 @@ rtx::Vector3 PointLight::CalculateLightColor(std::vector<std::shared_ptr<Rendera
 
 	// Phong
 	rtx::Vector3 lightDir = (position - intersectionPoint).Normal();
-	rtx::Vector3 normal = (intersectionPoint - closestObject->GetPosition()).Normal();
+	rtx::Vector3 normal = (intersectionPoint - closestRenderable->GetPosition()).Normal();
 
 	rtx::Vector3 R = lightDir - (normal * normal.Dot(lightDir) * 2.f);
 	const float ss = -cameraDir.Dot(R);
 
-	float spec = -ss > 0 ? pow(ss, closestObject->GetMaterial().specular) : 0.f;
-	spec *= closestObject->GetMaterial().specularCoeff;
+	float spec = -ss > 0 ? pow(ss, closestRenderable->GetMaterial().specular) : 0.f;
+	spec *= closestRenderable->GetMaterial().specularCoeff;
 
 	float shade = normal.Dot(lightDir);
 	const float atten = 1.f / (constAtten + linearAtten * closestDist + quadAtten * (closestDist * closestDist));

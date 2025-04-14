@@ -14,7 +14,7 @@ public:
 	Light(position, lightIntensity), constAtten(constAtten), 
 	linearAtten(linearAtten), quadAtten(quadAtten) {}
 
-	rtx::Vector3 CalculateLightColor(std::vector<std::shared_ptr<Renderable>> objects,
-		rtx::Vector3 intersectionPoint, std::shared_ptr<Renderable> closestObject,
+	rtx::Vector3 CalculateLightColor(std::vector<std::shared_ptr<Renderable>> renderables,
+		rtx::Vector3 intersectionPoint, std::shared_ptr<Renderable> closestRenderable,
 		rtx::Vector3 cameraDir, int n = 0) override;
 };

@@ -2,6 +2,7 @@
 
 #include "Material.hpp"
 #include "../RasTerX/include/Sphere.hpp"
+#include "../RasTerX/include/Plane.hpp"
 
 class Renderable
 {
@@ -27,4 +28,16 @@ public:
 
 	bool Trace(const rtx::Ray& ray, rtx::Vector3& ref_RayHit, Material& ref_Material) override;
 	rtx::Vector3 GetPosition() const { return sphere.center; }
+};
+
+class PlaneRenderable : public Renderable
+{
+private:
+	rtx::Plane plane;
+
+public:
+	PlaneRenderable(const Material& material, const rtx::Plane plane);
+
+	bool Trace(const rtx::Ray& ray, rtx::Vector3& ref_RayHit, Material& ref_Material) override;
+	rtx::Vector3 GetPosition() const { return plane.p; }
 };

@@ -1,8 +1,8 @@
 #include "../include/Renderer.hpp"
 #include "../include/TGA.hpp"
 
-Renderer::Renderer(unsigned int width, unsigned int height, unsigned int samplesPerPixel, unsigned int maxBounces, unsigned int tilesPerRow)
-	: samplesPerPixel(samplesPerPixel), maxBounces(maxBounces), tilesPerRow(tilesPerRow)
+Renderer::Renderer(unsigned int width, unsigned int height, unsigned int samplesPerPixel, unsigned int tilesPerRow)
+	: samplesPerPixel(samplesPerPixel), tilesPerRow(tilesPerRow)
 {
 	colorBuffer = std::make_unique<Buffer>(width, height);
 }
@@ -11,17 +11,7 @@ Renderer::~Renderer()
 {
 }
 
-void Renderer::AddRenderable(const std::shared_ptr<Renderable>& renderable)
-{
-	renderables.push_back(renderable);
-}
-
-void Renderer::AddLight(const std::shared_ptr<Light>& light)
-{
-	lights.push_back(light);
-}
-
-void Renderer::Render(const std::shared_ptr<Camera> camera)
+void Renderer::Render(const std::shared_ptr<Camera> camera, const std::shared_ptr<Scene> scene)
 {
 	colorBuffer->SetBufferColorFill(0xFF000000);
 
@@ -29,7 +19,7 @@ void Renderer::Render(const std::shared_ptr<Camera> camera)
 	{
 		for (unsigned int y = 0; y < colorBuffer->GetHeight(); ++y)
 		{
-			rtx::Vector3 sampledColor = Sampling(camera, x, y, 4, 0.0f, 0.0f, 0.5f);
+			rtx::Vector3 sampledColor = Sampling(camera, scene, x, y, 4, 0.0f, 0.0f, 0.5f);
 			Color pixelColor = Color(sampledColor, 1.f);
 			colorBuffer->SetPixel(x, y, pixelColor.ToHex());
 		}
@@ -41,17 +31,17 @@ void Renderer::Save(const std::string& path) const
 	TGA::Save(path, colorBuffer->GetColorBuffer(), colorBuffer->GetWidth(), colorBuffer->GetHeight());
 }
 
-rtx::Vector3 Renderer::Sampling(const std::shared_ptr<Camera> camera, const int x, const int y,
+rtx::Vector3 Renderer::Sampling(const std::shared_ptr<Camera> camera, const std::shared_ptr<Scene> scene, const int x, const int y,
 	const int maxSteps, const float xCenter, const float yCenter, const float offset)
 {
 	rtx::Vector3 color = rtx::Vector3::Zero(); // black
-	rtx::Vector3 centerColor = GetColor(camera, x + xCenter, y + yCenter);
+	rtx::Vector3 centerColor = GetColor(camera, scene, x + xCenter, y + yCenter);
 
 	std::vector<rtx::Vector3> tmpColors = {
-		GetColor(camera, x + xCenter - offset, y + yCenter - offset),
-		GetColor(camera, x + xCenter + offset, y + yCenter - offset),
-		GetColor(camera, x + xCenter - offset, y + yCenter + offset),
-		GetColor(camera, x + xCenter + offset, y + yCenter + offset),
+		GetColor(camera, scene, x + xCenter - offset, y + yCenter - offset),
+		GetColor(camera, scene, x + xCenter + offset, y + yCenter - offset),
+		GetColor(camera, scene, x + xCenter - offset, y + yCenter + offset),
+		GetColor(camera, scene, x + xCenter + offset, y + yCenter + offset),
 	};
 
 	if (maxSteps > 1)
@@ -64,7 +54,7 @@ rtx::Vector3 Renderer::Sampling(const std::shared_ptr<Camera> camera, const int 
 				const float newX = xCenter + ((i % 2 == 0) ? -newOffset : newOffset);
 				const float newY = yCenter + ((i < 2) ? -newOffset : newOffset);
 
-				tmpColors[i] = Sampling(camera, x, y, maxSteps - 1, newX, newY, newOffset);
+				tmpColors[i] = Sampling(camera, scene, x, y, maxSteps - 1, newX, newY, newOffset);
 			}
 			else
 			{
@@ -81,63 +71,24 @@ rtx::Vector3 Renderer::Sampling(const std::shared_ptr<Camera> camera, const int 
 	return color / static_cast<float>(tmpColors.size());
 }
 
-rtx::Vector3 Renderer::GetColor(const std::shared_ptr<Camera> camera, const float x, const float y)
+rtx::Vector3 Renderer::GetColor(const std::shared_ptr<Camera> camera, const std::shared_ptr<Scene> scene, const float x, const float y)
 {
 	rtx::Ray ray = camera->CastRay(x, y);
 	
-	rtx::Vector3 hit;
 	rtx::Vector3 closestHit(FLT_MAX, FLT_MAX, FLT_MAX);
-
-	Material material;
-	Material closestMaterial;
 
 	std::shared_ptr<Renderable> closestRenderable;
 
 	Color hitColor = Color(0xFF000000);
 
-	int foundID = -1;
-	bool foundHit = false;
+	int foundID = scene->CheckIntersections(ray, closestHit, closestRenderable);
 
-	for (const std::shared_ptr<Renderable>& renderable : renderables)
-	{
-		if (renderable->Trace(ray, hit, material))
-		{
-			if ((hit - ray.origin).Length() < (closestHit - ray.origin).Length())
-			{
-				foundHit = true;
-				foundID = std::find(renderables.begin(), renderables.end(), renderable) - renderables.begin();
-				closestHit = hit;
-				closestMaterial = material;
-				closestRenderable = renderable;
-			}
-		}
-	}
-
-	if (foundHit)
+	if (foundID >= 0)
 	{
 		auto viewDir = (camera->GetPosition() - closestHit).Normal();
-		auto colorVec = CalculateLighting(closestHit, closestRenderable, viewDir, foundID);
+		auto colorVec = scene->CalculateLighting(closestHit, closestRenderable, viewDir, foundID);
 		hitColor = Color(colorVec);
 	}
+
 	return hitColor.ToVector();
-}
-
-rtx::Vector3 Renderer::CalculateLighting(const rtx::Vector3& intersectionPoint, 
-	const std::shared_ptr<Renderable>& closestObject, const rtx::Vector3& cameraDir, const int n)
-{
-	if (lights.empty())
-	{
-		return closestObject->GetMaterial().GetColor().ToVector();
-	}
-
-	rtx::Vector3 finalColor = rtx::Vector3::Zero();
-
-	for (const auto& light : lights)
-	{
-		finalColor += light->CalculateLightColor(renderables, intersectionPoint, closestObject, cameraDir, n);
-	}
-
-	finalColor /= static_cast<float>(lights.size());
-
-	return finalColor;
 }
