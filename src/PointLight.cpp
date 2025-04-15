@@ -19,10 +19,10 @@ rtx::Vector3 PointLight::CalculateLightColor(std::vector<std::shared_ptr<Rendera
 		std::shared_ptr<Renderable> obj = objects[i];
 		if (obj->Trace(ray, intersection, material))
 		{
-			float distance = (ray.origin - intersection).Length();
-			if (distance < closestDist)
+			float dist = (ray.origin - intersection).Length();
+			if (dist != -1000.f && dist < closestDist)
 			{
-				closestDist = distance;
+				closestDist = dist;
 				closestNumber = i;
 				closestIntersection = intersection;
 			}
@@ -49,11 +49,11 @@ rtx::Vector3 PointLight::CalculateLightColor(std::vector<std::shared_ptr<Rendera
 	}
 
 	// Phong
-	rtx::Vector3 lightDir = (position - intersectionPoint).Normal();
-	rtx::Vector3 normal = (intersectionPoint - closestObject->GetPosition()).Normal();
+	rtx::Vector3 lightDir = ray.direction.Normal();
+	rtx::Vector3 normal = (closestObject->GetPosition()- intersectionPoint).Normal();
 
 	rtx::Vector3 R = lightDir - (normal * normal.Dot(lightDir) * 2.f);
-	const float ss = -cameraDir.Dot(R);
+	const float ss = ray.direction.Normal().Dot(R);
 
 	float spec = -ss > 0 ? pow(ss, closestObject->GetMaterial().specular) : 0.f;
 	spec *= closestObject->GetMaterial().specularCoeff;
