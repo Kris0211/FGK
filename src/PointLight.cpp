@@ -1,76 +1,60 @@
 #include "../include/PointLight.hpp"
 
 rtx::Vector3 PointLight::CalculateLightColor(std::vector<std::shared_ptr<Renderable>> objects,
-	rtx::Vector3 intersectionPoint, std::shared_ptr<Renderable> closestObject, rtx::Vector3 cameraDir, int n)
+    rtx::Vector3 intersectionPoint, std::shared_ptr<Renderable> closestObject,
+    rtx::Vector3 cameraDir, int n) 
 {
-	bool isInShadow = false;
-	rtx::Ray ray(position, (intersectionPoint - position).Normal(), FLT_MAX);
+    rtx::Vector3 baseColor = closestObject->GetMaterial().GetColor().ToVector();
+    float specCoeff = closestObject->GetMaterial().specularCoeff;
+    float specIntensity = closestObject->GetMaterial().specular;
 
-	float closestDist = 1000;
-	int closestNumber = n;
-	rtx::Vector3 distance = rtx::Vector3(-1000, -1000, -1000);
+    rtx::Vector3 lightColorVec(intensity.r, intensity.g, intensity.b);
+    rtx::Vector3 ambient = baseColor * 0.2f * lightColorVec;
 
-	rtx::Vector3 intersection;
-	rtx::Vector3 closestIntersection;
-	Material material;
+    bool isInShadow = false;
 
-	for (int i = 0; i < objects.size(); i++)
-	{
-		std::shared_ptr<Renderable> obj = objects[i];
-		if (obj->Trace(ray, intersection, material))
-		{
-			float dist = (ray.origin - intersection).Length();
-			if (dist != -1000.f && dist < closestDist)
-			{
-				closestDist = dist;
-				closestNumber = i;
-				closestIntersection = intersection;
-			}
-		}
-	}
+    rtx::Vector3 offsetIntersection = intersectionPoint +
+        (intersectionPoint - closestObject->GetPosition()).Normal() * 0.001f;
+    rtx::Ray shadowRay(offsetIntersection, (position - offsetIntersection).Normal(),
+        (position - offsetIntersection).Length());
 
-	float difference = fabs((position - intersectionPoint).Length() - (position - closestIntersection).Length());
+    for (int i = 0; i < objects.size(); i++) 
+    {
+        if (i == n) 
+            continue;
 
-	if (closestNumber != n || (closestNumber == n && difference > 0.001f))
-	{
-		isInShadow = true;
-	}
+        rtx::Vector3 shadowIntersection;
+        Material tempMat;
+        if (objects[i]->Trace(shadowRay, shadowIntersection, tempMat)) 
+        {
+            isInShadow = true;
+            break;
+        }
+    }
 
-	rtx::Vector3 baseColor = closestObject->GetMaterial().GetColor().ToVector();
-	rtx::Vector3 ambient = baseColor * 0.2f;
+    if (isInShadow) 
+    {
+        return ClampColorVector(ambient);
+    }
 
-	ambient.x *= intensity.r;
-	ambient.y *= intensity.g;
-	ambient.z *= intensity.b;
+    rtx::Vector3 lightDir = (position - intersectionPoint).Normal();
+    const float lightDist = (position - intersectionPoint).Length();
+    rtx::Vector3 normal = (intersectionPoint - closestObject->GetPosition()).Normal();
+    rtx::Vector3 viewDir = cameraDir.Normal();
 
-	if (isInShadow)
-	{
-		return ClampColorVector(ambient);
-	}
+    float attenuation = 1.0f / (constAtten + linearAtten * lightDist + quadAtten * lightDist * lightDist);
 
-	// Phong
-	rtx::Vector3 lightDir = ray.direction.Normal();
-	rtx::Vector3 normal = (closestObject->GetPosition()- intersectionPoint).Normal();
+    float diffuseFactor = std::max(normal.Dot(lightDir), 0.0f);
+    rtx::Vector3 diffuse = baseColor * diffuseFactor * lightColorVec;
 
-	rtx::Vector3 R = lightDir - (normal * normal.Dot(lightDir) * 2.f);
-	const float ss = ray.direction.Normal().Dot(R);
+    rtx::Vector3 reflectDir = normal * 2.0f * normal.Dot(lightDir) - lightDir;
+    reflectDir = reflectDir.Normal();
 
-	float spec = -ss > 0 ? pow(ss, closestObject->GetMaterial().specular) : 0.f;
-	spec *= closestObject->GetMaterial().specularCoeff;
+    float RdotV = std::max(reflectDir.Dot(viewDir), 0.0f);
+    float specFactor = pow(RdotV, closestObject->GetMaterial().specularCoeff) * closestObject->GetMaterial().specular;
 
-	float shade = normal.Dot(lightDir);
-	const float atten = 1.f / (constAtten + linearAtten * closestDist + quadAtten * (closestDist * closestDist));
-	shade = rtx::MathUtils::Clamp(shade * atten, 0.2f, 1.0f);
-	baseColor.x *= shade * intensity.r;
-	baseColor.y *= shade * intensity.g;
-	baseColor.z *= shade * intensity.b;
+    rtx::Vector3 specular = rtx::Vector3(1.0f, 1.0f, 1.0f) * specFactor * lightColorVec;
 
-	rtx::Vector3 specular = baseColor * spec;
-	specular.x *= intensity.r;
-	specular.y *= intensity.g;
-	specular.z *= intensity.b;
-
-	baseColor += specular;
-
-	return ClampColorVector(baseColor);
+    rtx::Vector3 finalColor = ambient + (diffuse + specular) * attenuation;
+    return ClampColorVector(finalColor);
 }

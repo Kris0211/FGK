@@ -26,12 +26,12 @@ int main(int argc, char** argv)
 {
 	Renderer renderer{WIDTH, HEIGHT, 512, 16, 8};
 
-	rtx::Sphere s1(rtx::Vector3(-0.5f, -0.5f, 2.f), 0.33f);
-	Material sm1(Color(0xFF0000FF), 16.f, 1.f, 0.0f);
+	rtx::Sphere s1(rtx::Vector3(-0.5f, 0.f, 2.f), 0.33f);
+	Material sm1(Color(0xFF0000FF), 0.8f, 5.f, 0.f);
 	std::shared_ptr<SphereRenderable> sphere1 = std::make_shared<SphereRenderable>(sm1, s1);
 	
-	rtx::Sphere s2(rtx::Vector3(0.f, 0.f, 2.f), 0.33f);
-	Material sm2(Color(0xFFFF0000), 128.f, 50.f, 0.0f);
+	rtx::Sphere s2(rtx::Vector3(0.5f, 0.f, 2.f), 0.33f);
+	Material sm2(Color(0xFFFF0000), 0.8f, 50.f, 0.f);
 	std::shared_ptr<SphereRenderable> sphere2 = std::make_shared<SphereRenderable>(sm2, s2);
 #if 0
 	rtx::Sphere s3(rtx::Vector3(-0.5f, 0.5f, 2.f), 0.33f);
