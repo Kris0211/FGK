@@ -74,23 +74,19 @@ rtx::Vector3 Renderer::Sampling(const std::shared_ptr<Camera> camera, const std:
 rtx::Vector3 Renderer::GetColor(const std::shared_ptr<Camera> camera, const std::shared_ptr<Scene> scene, const float x, const float y)
 {
 	rtx::Ray ray = camera->CastRay(x, y);
-	
+
 	rtx::Vector3 closestHit(FLT_MAX, FLT_MAX, FLT_MAX);
-
 	std::shared_ptr<Renderable> closestRenderable;
-
-	Color hitColor = Color(0xFF000000);
-
 	int foundID = -1;
-	
+
 	scene->CheckIntersections(ray, closestHit, closestRenderable, foundID);
 
-	if (foundID >= 0)
+	if (foundID >= 0) 
 	{
-		auto viewDir = (camera->GetPosition() - closestHit).Normal();
-		auto colorVec = scene->CalculateLighting(closestHit, closestRenderable, viewDir, foundID);
-		hitColor = Color(colorVec);
+		rtx::Vector3 viewDir = (camera->GetPosition() - closestHit).Normal();
+		rtx::Vector3 colorVec = scene->CalculateLighting(ray, closestHit, closestRenderable, viewDir, foundID);
+		return colorVec;
 	}
 
-	return hitColor.ToVector();
+	return rtx::Vector3::Zero();
 }

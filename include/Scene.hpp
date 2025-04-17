@@ -14,8 +14,9 @@ public:
 
 	int reflectionLimit;
 
-	rtx::Vector3 CalculateLighting(const rtx::Vector3& intersection, const std::shared_ptr<Renderable> closestRenderable, 
-		const rtx::Vector3& cameraDirection, const int n = 0);
+	rtx::Vector3 CalculateLighting(const rtx::Ray& ray, const rtx::Vector3& intersection,
+		const std::shared_ptr<Renderable> closestRenderable, const rtx::Vector3& cameraDirection,
+		const int n, int depth = 0);
 
 
 	void CheckIntersections(const rtx::Ray ray, rtx::Vector3& intersection, std::shared_ptr<Renderable>& closestRenderable, int& foundID);
