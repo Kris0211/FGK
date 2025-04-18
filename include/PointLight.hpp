@@ -3,8 +3,6 @@
 
 class PointLight : public Light {
 public:
-	rtx::Vector3 position;
-
 	float constAtten;
 	float linearAtten;
 	float quadAtten;

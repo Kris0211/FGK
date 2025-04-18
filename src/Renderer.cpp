@@ -23,6 +23,7 @@ void Renderer::Render(const std::shared_ptr<Camera> camera, const std::shared_pt
 			Color pixelColor = Color(sampledColor, 1.f);
 			colorBuffer->SetPixel(x, y, pixelColor.ToHex());
 		}
+		printf("Progress: %f%%\n", (float)x / colorBuffer->GetWidth() * 100.f);
 	}
 }
 

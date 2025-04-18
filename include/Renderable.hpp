@@ -15,7 +15,8 @@ public:
 	Material& GetMaterial() { return material; };
 
 	virtual bool Trace(const rtx::Ray& ray, rtx::Vector3& ref_RayHit, Material& ref_Material) = 0;
-	virtual rtx::Vector3 GetPosition() const = 0;
+	virtual rtx::Vector3 GetPosition() const = 0;    
+	virtual rtx::Vector3 GetNormalAt(const rtx::Vector3& point) const = 0;
 };
 
 class SphereRenderable : public Renderable
@@ -28,6 +29,10 @@ public:
 
 	bool Trace(const rtx::Ray& ray, rtx::Vector3& ref_RayHit, Material& ref_Material) override;
 	rtx::Vector3 GetPosition() const { return sphere.center; }
+	rtx::Vector3 GetNormalAt(const rtx::Vector3& point) const override 
+	{
+		return (point - sphere.center).Normal(); 
+	}
 };
 
 class PlaneRenderable : public Renderable
@@ -40,4 +45,8 @@ public:
 
 	bool Trace(const rtx::Ray& ray, rtx::Vector3& ref_RayHit, Material& ref_Material) override;
 	rtx::Vector3 GetPosition() const { return plane.p; }
+	rtx::Vector3 GetNormalAt(const rtx::Vector3& point) const override
+	{
+		return plane.n.Normal();
+	}
 };

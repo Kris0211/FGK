@@ -7,12 +7,12 @@
 class Scene
 {
 public:
-	Scene(int reflectionLimit = 1);
+	Scene(unsigned int reflectionLimit = 1);
 
 	std::vector<std::shared_ptr<Renderable>> renderables;
 	std::vector<std::shared_ptr<Light>> lights;
 
-	int reflectionLimit;
+	unsigned int reflectionLimit;
 
 	rtx::Vector3 CalculateLighting(const rtx::Ray& ray, const rtx::Vector3& intersection,
 		const std::shared_ptr<Renderable> closestRenderable, const rtx::Vector3& cameraDirection,

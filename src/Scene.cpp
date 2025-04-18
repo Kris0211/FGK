@@ -1,8 +1,7 @@
 #include "..\include\Scene.hpp"
 
-Scene::Scene(int reflectionLimit) : reflectionLimit(reflectionLimit)
-{
-}
+Scene::Scene(unsigned int reflectionLimit) 
+    : reflectionLimit(reflectionLimit) {}
 
 rtx::Vector3 Scene::CalculateLighting(const rtx::Ray& ray, const rtx::Vector3& intersection,
     const std::shared_ptr<Renderable> closestRenderable, const rtx::Vector3& cameraDirection,
@@ -37,7 +36,6 @@ rtx::Vector3 Scene::CalculateLighting(const rtx::Ray& ray, const rtx::Vector3& i
         std::shared_ptr<Renderable> reflRenderable;
         int reflID = -1;
 
-        int tempN = n;
         CheckIntersections(reflectionRay, reflHit, reflRenderable, reflID);
 
         if (reflID >= 0) 
@@ -61,7 +59,6 @@ rtx::Vector3 Scene::CalculateLighting(const rtx::Ray& ray, const rtx::Vector3& i
         std::shared_ptr<Renderable> refrRenderable;
         int refrID = -1;
 
-        int tempN = n;
         CheckIntersections(refractionRay, refrHit, refrRenderable, refrID);
 
         if (refrID >= 0) {
