@@ -21,7 +21,7 @@ constexpr unsigned int WIDTH = 512;
 constexpr unsigned int HEIGHT = 512;
 constexpr unsigned int SAMPLES_PER_PIXEL = 512;
 constexpr unsigned int TILES_PER_ROW = 8;
-constexpr unsigned int REFLECTION_LIMIT = 2;
+constexpr unsigned int REFLECTION_LIMIT = 4;
 
 //#define PRINT_DEBUG
 
@@ -33,16 +33,16 @@ int main(int argc, char** argv)
 	std::shared_ptr<Scene> scene = std::make_shared<Scene>(REFLECTION_LIMIT);
 
 	// Spheres
-	rtx::Sphere s1(rtx::Vector3(-0.5f, -0.5f, -1.f), 0.33f);
-	Material sm1(Color(Color::GRAY), 128.f, 5.f, 0.8f, 0.f);
+	rtx::Sphere s1(rtx::Vector3(-0.5f, -0.66f, -1.5f), 0.33f);
+	Material sm1(Color(Color::GRAY), 0.5f, 5.f, 0.8f, 0.f);
 	std::shared_ptr<SphereRenderable> sphere1 = std::make_shared<SphereRenderable>(sm1, s1);
 	
-	rtx::Sphere s2(rtx::Vector3(0.5f, -0.5f, -2.f), 0.33f);
-	Material sm2(Color(Color::GRAY), 128.f, 20.f, 0.f, 1.12f);
+	rtx::Sphere s2(rtx::Vector3(0.5f, -0.66f, -2.2f), 0.33f);
+	Material sm2(Color(Color::GRAY), 0.5f, 20.f, 0.f, 1.66f);
 	std::shared_ptr<SphereRenderable> sphere2 = std::make_shared<SphereRenderable>(sm2, s2);
 
-	//scene->AddRenderable(sphere1);
-	//scene->AddRenderable(sphere2);
+	scene->AddRenderable(sphere1);
+	scene->AddRenderable(sphere2);
 
 	// Planes
 	rtx::Plane p1(rtx::Vector3(5.f, 0.f, 0.f), rtx::Vector3(1.f, 0.f, 0.f));

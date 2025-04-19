@@ -11,7 +11,9 @@ rtx::Vector3 PointLight::CalculateLightColor(std::vector<std::shared_ptr<Rendera
     rtx::Vector3 ambient = baseColor * 0.2f * lightColorVec;
 
     rtx::Vector3 normal = closestRenderable->GetNormalAt(intersectionPoint);
-    rtx::Vector3 offsetIntersection = intersectionPoint + normal * 0.001f;
+
+    const float shadowBias = 0.001f;
+    rtx::Vector3 offsetIntersection = intersectionPoint + normal * shadowBias;
 
     rtx::Vector3 dirToLight = (position - offsetIntersection).Normal();
     const float distToLight = (position - offsetIntersection).Length();
@@ -28,7 +30,7 @@ rtx::Vector3 PointLight::CalculateLightColor(std::vector<std::shared_ptr<Rendera
         Material tempMat;
         if (renderables[i]->Trace(shadowRay, shadowIntersection, tempMat))
         {
-            if ((shadowIntersection - offsetIntersection).Length() < distToLight)
+            if ((shadowIntersection - offsetIntersection).Length() < distToLight - shadowBias)
             {
                 isInShadow = true;
                 break;

@@ -51,7 +51,7 @@ rtx::Vector3 Scene::CalculateLighting(const rtx::Ray& ray, const rtx::Vector3& i
 
     if (refractAmount > 0.001f) 
     {
-        rtx::Vector3 normal = (intersection - closestRenderable->GetPosition()).Normal();
+        rtx::Vector3 normal = closestRenderable->GetNormalAt(intersection);
         rtx::Vector3 refractDir = rtx::MathUtils::Refract(ray.direction.Normal(), normal, refractAmount);
         rtx::Ray refractionRay(intersection + refractDir * 0.001f, refractDir);
 
@@ -61,7 +61,8 @@ rtx::Vector3 Scene::CalculateLighting(const rtx::Ray& ray, const rtx::Vector3& i
 
         CheckIntersections(refractionRay, refrHit, refrRenderable, refrID);
 
-        if (refrID >= 0) {
+        if (refrID >= 0) 
+        {
             rtx::Vector3 refrViewDir = -refractionRay.direction;
             refractionColor = CalculateLighting(
                 refractionRay, refrHit, refrRenderable, refrViewDir, refrID, depth + 1);
