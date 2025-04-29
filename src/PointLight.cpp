@@ -30,6 +30,11 @@ rtx::Vector3 PointLight::CalculateLightColor(std::vector<std::shared_ptr<Rendera
         Material tempMat;
         if (renderables[i]->Trace(shadowRay, shadowIntersection, tempMat))
         {
+            const float refractAmount = renderables[i]->GetMaterial().refract;
+
+            if (std::abs(refractAmount - 1.0f) < 0.001f)
+                continue;
+
             if ((shadowIntersection - offsetIntersection).Length() < distToLight - shadowBias)
             {
                 isInShadow = true;

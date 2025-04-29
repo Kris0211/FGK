@@ -38,7 +38,7 @@ int main(int argc, char** argv)
 	std::shared_ptr<SphereRenderable> sphere1 = std::make_shared<SphereRenderable>(sm1, s1);
 	
 	rtx::Sphere s2(rtx::Vector3(0.8f, -2.f, -0.5f), 0.75f);
-	Material sm2(Color(Color::GRAY), 0.5f, 20.f, 0.f, 2.4f);
+	Material sm2(Color(Color::GRAY), 0.5f, 20.f, 0.f, 1.f);
 	std::shared_ptr<SphereRenderable> sphere2 = std::make_shared<SphereRenderable>(sm2, s2);
 
 	scene->AddRenderable(sphere1);
@@ -74,7 +74,7 @@ int main(int argc, char** argv)
 	scene->AddRenderable(plane3);
 	scene->AddRenderable(plane4);
 	scene->AddRenderable(plane5);
-	scene->AddRenderable(plane6);
+	//scene->AddRenderable(plane6);
 
 	// Lights
 	PointLight light1(rtx::Vector3(0.f, 1.f, -3.f), 
